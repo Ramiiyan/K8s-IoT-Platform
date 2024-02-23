@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rovo-iot-platform-service
+  namespace : rovo
+spec:
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    deployment: rovo-iot-platform
+  ports:
+    # ports that this service should serve on
+    - name: backend
+      protocol: TCP
+      port: 8080
+    - name: websocket
+      protocol: TCP
+      port: 9092

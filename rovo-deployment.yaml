@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rovo-iot-platform-deployment
+  namespace: rovo
+  # labels:
+  #   app: nginx
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: rovo-iot-platform
+  template:
+    metadata:
+      labels:
+        deployment: rovo-iot-platform
+    spec:
+      containers:
+      - name: rovo
+        image: docker.io/library/rovo:0.0.1
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1000m"
+          limits:
+            memory: "3Gi"
+            cpu: "2000m"
+        ports:
+            - containerPort: 8080
+              protocol: "TCP"
+            - containerPort: 9092
+              protocol: "TCP"
+        startupProbe:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - curl -s -o /dev/null http://localhost:8080/hello2 && echo ok || echo not_ok
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - curl -s -o /dev/null http://localhost:8080/hello2 && echo ok || echo not_ok
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - curl -s -o /dev/null http://localhost:8080/hello2 && echo ok || echo not_ok
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        # volumeMounts:
+        #   - name: wso2am-conf
+        #     mountPath: /home/wso2carbon/wso2-config-volume/repository/conf
+      # volumes:
+      # - name: wso2am-conf
+      #   configMap:
+      #     name: wso2am-single-node-am-conf
