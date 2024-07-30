@@ -7,12 +7,12 @@ metadata:
   #   spec.ingressClassName: "nginx"
   #   nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ .Values.ingress.className }}
   # tls:
   # - hosts:
   #   - "agrio.rovo.com"
   rules:
-  - host: "agrio.rovo.com"
+  - host: {{ .Values.ingress.hosts.host }}
     http:
       paths:
       - path: /

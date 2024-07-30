@@ -1,0 +1,22 @@
+replicaCount: 1
+
+image:
+  repository: ramiiyans/rovo
+  tag: latest
+  pullPolicy: IfNotPresent
+
+ingress:
+  className: nginx
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: rovo.local
+      paths: []
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

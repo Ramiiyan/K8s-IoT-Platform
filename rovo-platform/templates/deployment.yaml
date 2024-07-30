@@ -6,9 +6,9 @@ metadata:
   # labels:
   #   app: nginx
 spec:
+  replicas: {{ .Values.replicaCount }}
   strategy:
     type: Recreate
-  replicas: 1
   selector:
     matchLabels:
       deployment: rovo-iot-platform
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: rovo
-        image: docker.io/library/rovo:0.0.1
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         resources:
           requests:
             memory: "2Gi"
@@ -37,7 +37,7 @@ spec:
             command:
               - /bin/sh
               - -c
-              - curl -s -o /dev/null http://localhost:8080/hello2 && echo ok || echo not_ok
+              - curl -s -o /dev/null http://localhost:8080/healthcheck && echo ok || echo not_ok
           initialDelaySeconds: 60
           periodSeconds: 10
         readinessProbe:
@@ -45,7 +45,7 @@ spec:
             command:
               - /bin/sh
               - -c
-              - curl -s -o /dev/null http://localhost:8080/hello2 && echo ok || echo not_ok
+              - curl -s -o /dev/null http://localhost:8080/healthcheck && echo ok || echo not_ok
           initialDelaySeconds: 30
           periodSeconds: 10
         livenessProbe:
@@ -53,13 +53,6 @@ spec:
             command:
               - /bin/sh
               - -c
-              - curl -s -o /dev/null http://localhost:8080/hello2 && echo ok || echo not_ok
+              - curl -s -o /dev/null http://localhost:8080/healthcheck && echo ok || echo not_ok
           initialDelaySeconds: 30
           periodSeconds: 10
-        # volumeMounts:
-        #   - name: wso2am-conf
-        #     mountPath: /home/wso2carbon/wso2-config-volume/repository/conf
-      # volumes:
-      # - name: wso2am-conf
-      #   configMap:
-      #     name: wso2am-single-node-am-conf
