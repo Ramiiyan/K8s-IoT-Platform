@@ -12,7 +12,8 @@ spec:
   # - hosts:
   #   - "agrio.rovo.com"
   rules:
-  - host: {{ .Values.ingress.hosts.host }}
+  {{- range .Values.ingress.hosts }}
+  - host: {{ .host }}
     http:
       paths:
       - path: /
@@ -22,3 +23,4 @@ spec:
             name: rovo-iot-platform-service
             port: 
               number: 80
+  {{- end }}

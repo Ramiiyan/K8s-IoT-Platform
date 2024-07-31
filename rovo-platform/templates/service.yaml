@@ -15,3 +15,6 @@ spec:
     - name: websocket
       protocol: TCP
       port: 9092
+    - name: mongodb
+      protocol: TCP
+      port: 27017
